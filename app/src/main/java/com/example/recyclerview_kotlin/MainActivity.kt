@@ -1,16 +1,23 @@
 package com.example.recyclerview_kotlin
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var rvSongs: RecyclerView
     private lateinit var mSongAdapter: SongAdapter
+
+    /*
+    *   List (danh sách bất biến - immutable):
+    *       -> là một collection chỉ cho phép đọc (read-only)
+    *       -> một khi đã tạo và gán giá trị, không thể thay đổi nội dung, tức là ko thể thêm, xóa, hay thay đổi phần tử.
+    *       -> add(), remove(), clear() không tồn tại trong interface List
+    *
+    *   MutableList (danh sách khả biến - mutable):
+    *       -> là một collection cho phép cả đọc và ghi
+    */
     private lateinit var mSongs: MutableList<SongModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +47,25 @@ class MainActivity : AppCompatActivity() {
         rvSongs.adapter = mSongAdapter
 
         // Thiết lập LayoutManager
+        /*
+        *   Đây là một thành pahàn cốt lỗi của RecyclerView. Nó chịu trách nhiệm đo lường và định vị các item view bên trong
+        * RecyclerView (nói đơn giản là LayoutManager quyết định cách sắp xếp các item trên màn hình)
+        *
+        *   RecyclerView không tự mình làm việc này. Nó giao hoàn toàn nhiện vụ sắp xếp bố cục cho một LayoutManager
+        * -> mang lại sự linh hoạt rất lớn, vì ta có thể thay đổi hoàn toàn cách hiển thị danh sách chỉ bằng cách thay đổi LayoutManager mà khôgn cần sửa đổi Adapter
+        *
+        *   Lấy ví dụ, tưởng tượng rằng ta có một caiái hộp (Chính là RecyclerView) và rất nhiều món đồ chơi (item view). Ta cần một người (LayoutManager)
+        * để nói cho ta biết phải sắp xếp những món đồ chơi đó vào hộp như thế nào:
+        *       + là xếp thành một hàng dọc?
+        *       + xêp thành một hàng ngang?
+        *       + xếp thành một lưới (grid)?
+        *       + xếp so le nhau (staggered grid)?
+        *  -> nếu không có người chỉ dẫn (LayoutManager), RecyclerView sẽ không bết phải làm gì với các item và sẽ không hiển thị bất cứ thứ gì.
+        *   Có 3 loại LayoutManager chính:
+        *       + LinearLayoutManager (.VERTICAL / .HORIZONTAL)
+        *       + GridLayoutManager
+        *       + StaggeredGridLayoutManager
+        */
         val layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.VERTICAL,
